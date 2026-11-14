@@ -35,3 +35,8 @@ Read the state before acting:
   `tests/test_hytale_idle.py`. The main loop sleeps on the UDP ports while the container is stopped, and samples
   received bytes from `/proc/<pid>/net/dev` while it runs.
 - `install.sh`: the setup wizard (`--dry-run` changes nothing).
+- `hytale_update.py` (+ `hytale_update_mods.py`, the boot loop, and `hytale_update_lib.py`, the file and log
+  helpers): the nightly updater. Its result is in `/var/lib/hytale-idle/update.json`; a disabled mod's reason is
+  in `mods-disabled/<mod>.disabled.json`. An `update-alert.json` means it rolled back or failed: read it before
+  touching the server. Do not move mods in or out of `mods-disabled/` by hand while a run holds
+  `/run/hytale-update.lock`. Proof: `tests/test_hytale_update.py`.

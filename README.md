@@ -74,6 +74,25 @@ Bind it to localhost or a private address unless you want the world to see wheth
 To change them after installing, edit the `ExecStart` line in `/etc/systemd/system/hytale-idle.service`, then
 `sudo systemctl daemon-reload && sudo systemctl restart hytale-idle`.
 
+## Always on the latest Hytale (preview)
+
+`hytale_update.py` keeps the server on the newest Hytale without breaking it on mods. Run it nightly; it does
+nothing while anyone might be playing, and pauses hytale-idle while it works.
+
+- **New version out:** it backs up the world, installs the new server files (keeping the old ones), and boots the
+  server with every mod.
+- **A mod doesn't work with it:** the mod moves to `mods-disabled/` with a note (`<mod>.disabled.json`: why,
+  which version, since when). Players never download mods, so they just don't get that mod's content.
+- **It's fixed later:** disabled mods are retried after every update and once a week; any that load go back on.
+- **Hytale itself won't start, even with no mods:** the old version and the world backup go back, and an alert
+  file (`/var/lib/hytale-idle/update-alert.json`) says what happened, quoting the log.
+- **Early warnings:** deprecation warnings Hytale logs (for example "`--transport QUIC` ... removed in 0.9") are
+  listed in `/var/lib/hytale-idle/update.json`, so you can fix a setting before an update breaks it.
+
+⚠️ Preview: the log patterns it uses to spot a failed mod come from community guides, and the default paths and
+downloader flags are guesses. Check `python3 hytale_update.py --help` against your server before scheduling it.
+Tests: `python3 tests/test_hytale_update.py`.
+
 ## Prior art, honestly
 
 Nothing here is a new idea. [lazymc](https://github.com/timvisee/lazymc) and
