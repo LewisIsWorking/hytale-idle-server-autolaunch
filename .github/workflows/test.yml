@@ -9,4 +9,5 @@ jobs:
         with:
           python-version: '3.12'
       - run: python3 tests/test_hytale_idle.py
+      - run: python3 tests/test_hytale_update.py
       - run: bash -n install.sh
